@@ -1,0 +1,9 @@
+body {
+  background: no-repeat linear-gradient(rgb(201, 201, 201), white);
+}
+
+#canvas {
+  display: flex;
+  margin: 50px auto;
+  border: 1px solid black;
+}
