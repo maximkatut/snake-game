@@ -18,15 +18,11 @@ ctx.fillRect(0, 0, box.width, box.height);
 
 // Create a snake object
 let snake = {
-  x: 120,
-  y: 200,
+  x: [120],
+  y: [200],
   length: 40,
-  speed: 3,
-  direction: "left",
-  goRight: function() {},
-  goLeft: function() {},
-  goUp: function() {},
-  goDown: function() {}
+  speed: 300,
+  direction: "left"
 };
 // Create a food object
 let food = {
@@ -34,60 +30,71 @@ let food = {
   y: 0
 };
 
-snake.goRight = function() {
-  ctx.strokeStyle = "black";
-  ctx.lineWidth = 10;
-  ctx.beginPath();
-  ctx.moveTo(snake.x - snake.length, snake.y);
-  ctx.lineTo(snake.x, snake.y);
-  ctx.stroke();
-  if (snake.x > box.width + snake.length) {
-    snake.x = 0;
-  }
-  snake.x += snake.speed;
-};
-
-snake.goLeft = function() {
-  ctx.strokeStyle = "black";
-  ctx.lineWidth = 10;
-  ctx.beginPath();
-  ctx.moveTo(snake.x - snake.length, snake.y);
-  ctx.lineTo(snake.x, snake.y);
-  ctx.stroke();
-  if (snake.x < 0) {
-    snake.x = box.width + snake.length;
-  }
-  snake.x -= snake.speed;
-};
-
-function setDirection() {
-  
+function init() {
+  snake.setDirection();
+  game();
 }
+
+function game() {
+  refreshCanvas();
+  draw();
+  window.setTimeout(game, snake.speed);
+}
+
+function draw() {
+  ctx.fillStyle = "black";
+  ctx.fillRect(snake.x, snake.y, 10, 10);
+  switch (snake.direction) {
+    case "up":
+      if (snake.y < 0) {
+        snake.y[0] = box.height;
+      }
+      snake.y[0] -= 10;
+      break;
+    case "down":
+      if (snake.y > box.height) {
+        snake.y[0] = 0;
+      }
+      snake.y[0] += 10;
+      break;
+    case "left":
+      if (snake.x < 0) {
+        snake.x[0] = box.width;
+      }
+      snake.x[0] -= 10;
+      break;
+    case "right":
+      if (snake.x > box.width) {
+        snake.x[0] = 0;
+      }
+      snake.x[0] += 10;
+      break;
+  }
+}
+
+snake.setDirection = function() {
+  document.addEventListener("keydown", function(e) {
+    let key = e.keyCode;
+    let keysToDirection = {
+      38: "up",
+      40: "down",
+      37: "left",
+      39: "right"
+    };
+    let direction = keysToDirection[key];
+    if (direction) {
+      snake.direction = direction;
+      console.log(snake.direction);
+    }
+  });
+};
 
 function refreshCanvas() {
   ctx.fillStyle = "green";
   ctx.fillRect(0, 0, box.width, box.height);
 }
 
-let goSnake = function() {
-  refreshCanvas();
-  setDirection();
-  window.requestAnimationFrame(goSnake);
-};
-
-
-
-window.addEventListener("keydown", function(e) {
-  if (e.keyCode === keyLeft && snake.direction !== "left") {
-    goSnake();
-  }
-  if (e.keyCode === keyRight && snake.direction !== "right") {
-    goSnake();
-  }
-  if (e.keyCode === keyUp && snake.direction !== "up") {
-    goSnake();
-  }
-});
+init();
 
 // function makeFood() {
 //   ctx.fillStyle = "red";
