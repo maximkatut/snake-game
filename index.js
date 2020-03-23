@@ -20,8 +20,8 @@ ctx.fillRect(0, 0, box.width, box.height);
 let snake = {
   x: [120],
   y: [200],
-  length: 40,
-  speed: 300,
+  length: 10,
+  speed: 1,
   direction: "left"
 };
 // Create a food object
@@ -38,36 +38,62 @@ function init() {
 function game() {
   refreshCanvas();
   draw();
-  window.setTimeout(game, snake.speed);
+  window.requestAnimationFrame(game);
+}
+
+function drawBody(dx, dy) {
+  snake.x = snake.x.slice(0, 1);
+  for (let i = 0; i < snake.length / 10; i++) {
+    snake.x.push(snake.x[i] + dx);
+  }
+  snake.y = snake.y.slice(0, 1);
+  for (let i = 0; i < snake.length / 10; i++) {
+    snake.y.push(snake.y[i] + dy);
+  }
 }
 
 function draw() {
   ctx.fillStyle = "black";
-  ctx.fillRect(snake.x, snake.y, 10, 10);
   switch (snake.direction) {
     case "up":
-      if (snake.y < 0) {
+      if (snake.y[0] < 0) {
         snake.y[0] = box.height;
       }
-      snake.y[0] -= 10;
+      drawBody(10, 10);
+      for (let i = 0; i < snake.length / 10; i++) {
+        ctx.fillRect(snake.x[0], snake.y[i], 10, 10);
+        snake.y[i] -= snake.speed;
+      }
       break;
     case "down":
-      if (snake.y > box.height) {
+      if (snake.y[0] > box.height) {
         snake.y[0] = 0;
       }
-      snake.y[0] += 10;
+      drawBody(10, 10);
+      for (let i = 0; i < snake.length / 10; i++) {
+        ctx.fillRect(snake.x[0], snake.y[i], 10, 10);
+        snake.y[i] += snake.speed;
+      }
       break;
     case "left":
-      if (snake.x < 0) {
+      if (snake.x[0] < 0) {
         snake.x[0] = box.width;
       }
-      snake.x[0] -= 10;
+      drawBody(10, 10);
+      for (let i = 0; i < snake.length / 10; i++) {
+        ctx.fillRect(snake.x[i], snake.y[0], 10, 10);
+        snake.x[i] -= snake.speed;
+      }
       break;
     case "right":
-      if (snake.x > box.width) {
+      if (snake.x[0] > box.width) {
         snake.x[0] = 0;
       }
-      snake.x[0] += 10;
+      drawBody(10, 10);
+      for (let i = 0; i < snake.length / 10; i++) {
+        ctx.fillRect(snake.x[i], snake.y[0], 10, 10);
+        snake.x[i] += snake.speed;
+      }
       break;
   }
 }
