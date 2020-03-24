@@ -37,8 +37,9 @@ let snake = {
     }
   ],
   length: 40,
-  speed: 300,
-  direction: "right"
+  speed: 200,
+  direction: "right",
+  step: 10
 };
 // Create a food object
 let food = {
@@ -59,23 +60,34 @@ function game() {
 
 function drawBody() {
   //draw the head of the snake
-  ctx.fillRect(snake.head.x, snake.head.y, 8, 8);
+  ctx.fillRect(
+    snake.head.x,
+    snake.head.y,
+    snake.step * 0.85,
+    snake.step * 0.85
+  );
   ctx.save();
   ctx.fillStyle = "red";
-  ctx.fillRect(snake.head.x, snake.head.y, 4, 4);
+  ctx.fillRect(
+    snake.head.x * 1.02,
+    snake.head.y,
+    snake.step * 0.25,
+    snake.step * 0.25
+  );
   ctx.restore();
   // draw the rest of the body
   for (let i = 0; i < snake.body.length; i++) {
-    ctx.fillRect(snake.body[i].x, snake.body[i].y, 8, 8);
+    ctx.fillRect(
+      snake.body[i].x,
+      snake.body[i].y,
+      snake.step * 0.85,
+      snake.step * 0.85
+    );
   }
   //delete last coord from array
   snake.body.pop();
   //add new coord in start of array
   snake.body.unshift({ x: snake.head.x, y: snake.head.y });
-  console.log(snake.head.x);
-  console.log(snake.head.y);
-  console.log(snake.body);
-  console.log(snake.direction);
 }
 
 function draw() {
@@ -86,28 +98,28 @@ function draw() {
       if (snake.head.y === 0) {
         snake.head.y = box.height;
       }
-      snake.head.y -= 10;
+      snake.head.y -= snake.step;
       break;
     case "down":
       drawBody();
-      if (snake.head.y === box.height - 10) {
-        snake.head.y = -10;
+      if (snake.head.y === box.height - snake.step) {
+        snake.head.y = -snake.step;
       }
-      snake.head.y += 10;
+      snake.head.y += snake.step;
       break;
     case "left":
       drawBody();
       if (snake.head.x === 0) {
         snake.head.x = box.width;
       }
-      snake.head.x -= 10;
+      snake.head.x -= snake.step;
       break;
     case "right":
       drawBody();
-      if (snake.head.x === box.width - 10) {
-        snake.head.x = -10;
+      if (snake.head.x === box.width - snake.step) {
+        snake.head.x = -snake.step;
       }
-      snake.head.x += 10;
+      snake.head.x += snake.step;
       break;
   }
 }
