@@ -36,8 +36,6 @@ let snake = {
       y: 100
     }
   ],
-  x: 0,
-  y: 100,
   length: 40,
   speed: 300,
   direction: "right"
@@ -74,37 +72,41 @@ function drawBody() {
   snake.body.pop();
   //add new coord in start of array
   snake.body.unshift({ x: snake.head.x, y: snake.head.y });
+  console.log(snake.head.x);
+  console.log(snake.head.y);
+  console.log(snake.body);
+  console.log(snake.direction);
 }
 
 function draw() {
   ctx.fillStyle = "black";
   switch (snake.direction) {
     case "up":
-      if (snake.head.y < 0) {
-        snake.head.y = box.height - 10;
-      }
       drawBody();
+      if (snake.head.y === 0) {
+        snake.head.y = box.height;
+      }
       snake.head.y -= 10;
       break;
     case "down":
-      if (snake.head.y > box.height - 10) {
-        snake.head.y = 0;
-      }
       drawBody();
+      if (snake.head.y === box.height - 10) {
+        snake.head.y = -10;
+      }
       snake.head.y += 10;
       break;
     case "left":
-      if (snake.head.x < 0) {
-        snake.head.x = box.width - 10;
-      }
       drawBody();
+      if (snake.head.x === 0) {
+        snake.head.x = box.width;
+      }
       snake.head.x -= 10;
       break;
     case "right":
-      if (snake.head.x > box.width - 10) {
-        snake.head.x = 0;
-      }
       drawBody();
+      if (snake.head.x === box.width - 10) {
+        snake.head.x = -10;
+      }
       snake.head.x += 10;
       break;
   }
