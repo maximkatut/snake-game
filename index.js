@@ -7,8 +7,8 @@ const keyLeft = 37;
 const keyRight = 39;
 
 box = {
-  width: 500,
-  height: 500
+  width: 400,
+  height: 400
 };
 
 canvas.width = box.width;
@@ -18,11 +18,29 @@ ctx.fillRect(0, 0, box.width, box.height);
 
 // Create a snake object
 let snake = {
-  x: [120],
-  y: [200],
-  length: 10,
-  speed: 1,
-  direction: "left"
+  head: {
+    x: 100,
+    y: 100
+  },
+  body: [
+    {
+      x: 90,
+      y: 100
+    },
+    {
+      x: 80,
+      y: 100
+    },
+    {
+      x: 70,
+      y: 100
+    }
+  ],
+  x: 0,
+  y: 100,
+  length: 40,
+  speed: 300,
+  direction: "right"
 };
 // Create a food object
 let food = {
@@ -38,62 +56,56 @@ function init() {
 function game() {
   refreshCanvas();
   draw();
-  window.requestAnimationFrame(game);
+  window.setTimeout(game, snake.speed);
 }
 
-function drawBody(dx, dy) {
-  snake.x = snake.x.slice(0, 1);
-  for (let i = 0; i < snake.length / 10; i++) {
-    snake.x.push(snake.x[i] + dx);
+function drawBody() {
+  //draw the head of the snake
+  ctx.fillRect(snake.head.x, snake.head.y, 8, 8);
+  ctx.save();
+  ctx.fillStyle = "red";
+  ctx.fillRect(snake.head.x, snake.head.y, 4, 4);
+  ctx.restore();
+  // draw the rest of the body
+  for (let i = 0; i < snake.body.length; i++) {
+    ctx.fillRect(snake.body[i].x, snake.body[i].y, 8, 8);
   }
-  snake.y = snake.y.slice(0, 1);
-  for (let i = 0; i < snake.length / 10; i++) {
-    snake.y.push(snake.y[i] + dy);
-  }
+  //delete last coord from array
+  snake.body.pop();
+  //add new coord in start of array
+  snake.body.unshift({ x: snake.head.x, y: snake.head.y });
 }
 
 function draw() {
   ctx.fillStyle = "black";
   switch (snake.direction) {
     case "up":
-      if (snake.y[0] < 0) {
-        snake.y[0] = box.height;
+      if (snake.head.y < 0) {
+        snake.head.y = box.height - 10;
       }
-      drawBody(10, 10);
-      for (let i = 0; i < snake.length / 10; i++) {
-        ctx.fillRect(snake.x[0], snake.y[i], 10, 10);
-        snake.y[i] -= snake.speed;
-      }
+      drawBody();
+      snake.head.y -= 10;
       break;
     case "down":
-      if (snake.y[0] > box.height) {
-        snake.y[0] = 0;
+      if (snake.head.y > box.height - 10) {
+        snake.head.y = 0;
       }
-      drawBody(10, 10);
-      for (let i = 0; i < snake.length / 10; i++) {
-        ctx.fillRect(snake.x[0], snake.y[i], 10, 10);
-        snake.y[i] += snake.speed;
-      }
+      drawBody();
+      snake.head.y += 10;
       break;
     case "left":
-      if (snake.x[0] < 0) {
-        snake.x[0] = box.width;
+      if (snake.head.x < 0) {
+        snake.head.x = box.width - 10;
       }
-      drawBody(10, 10);
-      for (let i = 0; i < snake.length / 10; i++) {
-        ctx.fillRect(snake.x[i], snake.y[0], 10, 10);
-        snake.x[i] -= snake.speed;
-      }
+      drawBody();
+      snake.head.x -= 10;
       break;
     case "right":
-      if (snake.x[0] > box.width) {
-        snake.x[0] = 0;
+      if (snake.head.x > box.width - 10) {
+        snake.head.x = 0;
       }
-      drawBody(10, 10);
-      for (let i = 0; i < snake.length / 10; i++) {
-        ctx.fillRect(snake.x[i], snake.y[0], 10, 10);
-        snake.x[i] += snake.speed;
-      }
+      drawBody();
+      snake.head.x += 10;
       break;
   }
 }
@@ -110,7 +122,6 @@ snake.setDirection = function() {
     let direction = keysToDirection[key];
     if (direction) {
       snake.direction = direction;
-      console.log(snake.direction);
     }
   });
 };
