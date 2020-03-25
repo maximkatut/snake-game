@@ -1,10 +1,7 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-
-const keyUp = 38;
-const keyDown = 40;
-const keyLeft = 37;
-const keyRight = 39;
+let score = document.querySelector(".score");
+let level = document.querySelector(".level");
 
 box = {
   width: 400,
@@ -39,26 +36,31 @@ let snake = {
   length: 40,
   speed: 200,
   direction: "right",
-  step: 10
+  step: 10,
+  score: 0,
+  level: 1
 };
 // Create a food object
 let food = {
-  x: 0,
-  y: 0
+  x: this.x,
+  y: this.y
 };
 
 function init() {
-  snake.setDirection();
   game();
 }
 
 function game() {
+  snake.setDirection();
   refreshCanvas();
   draw();
+  eatenFood();
   window.setTimeout(game, snake.speed);
 }
 
 function drawBody() {
+  //draw food
+  ctx.fillRect(food.x, food.y, snake.step * 0.85, snake.step * 0.85);
   //draw the head of the snake
   ctx.fillRect(
     snake.head.x,
@@ -140,16 +142,40 @@ snake.setDirection = function() {
   });
 };
 
+food.setFood = function() {
+  this.x = Math.floor((Math.random() * box.width) / 10) * 10;
+  this.y = Math.floor((Math.random() * box.width) / 10) * 10;
+};
+
+food.setFood();
+
+function eatenFood() {
+  if (snake.head.x === food.x && snake.head.y === food.y) {
+    snake.score++;
+    setNextLevel();
+    score.innerText = "Score: " + snake.score;
+    snake.body.push({
+      x: snake.body[snake.body.length - 1].x,
+      y: snake.body[snake.body.length - 1].y
+    });
+    food.setFood();
+  }
+}
+
+// if score more than 10 go to next level and increase the speed
+function setNextLevel() {
+  if (snake.score === 10) {
+    snake.level++;
+    snake.speed -= 25;
+    snake.score = 0;
+    level.innerText = "Level: " + snake.level;
+    snake.body = snake.body.slice(0, 2);
+  }
+}
+
 function refreshCanvas() {
   ctx.fillStyle = "green";
   ctx.fillRect(0, 0, box.width, box.height);
 }
 
 init();
-
-// function makeFood() {
-//   ctx.fillStyle = "red";
-//   let x = Math.floor(Math.random() * box.width);
-//   let y = Math.floor(Math.random() * box.height);
-//   ctx.fillRect(x, y, 10, 10);
-// }

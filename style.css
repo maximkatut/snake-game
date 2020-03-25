@@ -1,15 +1,22 @@
+h1,
+p {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-  background: repeat
-    linear-gradient(
-      to right,
-      rgb(198, 255, 221),
-      rgb(251, 215, 134),
-      rgb(247, 121, 125)
-    );
+  font-family: "VT323", "Monospace";
+}
+
+.block {
+  display: flex;
+  width: 100px;
+  margin: 0 auto;
 }
 
 #canvas {
   display: flex;
-  margin: 50px auto;
+  margin: 10px auto;
   border: 1px solid black;
 }
