@@ -45,7 +45,7 @@ let food = {
   x: this.x,
   y: this.y
 };
-let game_switch = true;
+let game_switch = false;
 
 function init() {
   game();
@@ -54,8 +54,8 @@ function init() {
 function game() {
   snake.setDirection();
   refreshCanvas();
+  startGame();
   youWin();
-  playGame(game_switch);
   eatenFood();
   window.setTimeout(game, snake.speed);
 }
@@ -180,15 +180,28 @@ function youWin() {
   if (snake.level === 10) {
     refreshCanvas();
     game_switch = false;
+    snake.speed = 200;
+    level.innerText = "Level: 1";
     ctx.fillStyle = "black";
     ctx.font = "48px VT323";
     ctx.fillText("You WIN!", 120, 200);
+    ctx.fillText("Press SPACE to begin", 10, 250);
   }
 }
 
-function playGame(game_switch) {
+function startGame() {
   if (game_switch) {
     draw();
+  } else {
+    ctx.fillStyle = "black";
+    ctx.font = "48px VT323";
+    ctx.fillText("Press SPACE to begin", 10, 200);
+    window.addEventListener("keydown", e => {
+      if (e.keyCode === 32) {
+        game_switch = true;
+        snake.level = 1;
+      }
+    });
   }
 }
 
