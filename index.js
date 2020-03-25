@@ -3,7 +3,7 @@ const ctx = canvas.getContext("2d");
 let score = document.querySelector(".score");
 let level = document.querySelector(".level");
 
-box = {
+const box = {
   width: 400,
   height: 400
 };
@@ -45,6 +45,7 @@ let food = {
   x: this.x,
   y: this.y
 };
+let game_switch = true;
 
 function init() {
   game();
@@ -53,7 +54,8 @@ function init() {
 function game() {
   snake.setDirection();
   refreshCanvas();
-  draw();
+  youWin();
+  playGame(game_switch);
   eatenFood();
   window.setTimeout(game, snake.speed);
 }
@@ -170,6 +172,23 @@ function setNextLevel() {
     snake.score = 0;
     level.innerText = "Level: " + snake.level;
     snake.body = snake.body.slice(0, 2);
+  }
+}
+
+// after level 10 gamer win
+function youWin() {
+  if (snake.level === 10) {
+    refreshCanvas();
+    game_switch = false;
+    ctx.fillStyle = "black";
+    ctx.font = "48px VT323";
+    ctx.fillText("You WIN!", 120, 200);
+  }
+}
+
+function playGame(game_switch) {
+  if (game_switch) {
+    draw();
   }
 }
 
