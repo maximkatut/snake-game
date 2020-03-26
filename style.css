@@ -11,12 +11,20 @@ body {
 
 .block {
   display: flex;
-  width: 100px;
+  justify-content: space-between;
+  width: 400px;
   margin: 0 auto;
+  background-color: green;
+  border: 2px solid black;
+  font-size: 24px;
+}
+
+.block p {
+  padding: 0 20px;
 }
 
 #canvas {
   display: flex;
-  margin: 10px auto;
-  border: 1px solid black;
+  margin: 0 auto;
+  border: 2px solid black;
 }

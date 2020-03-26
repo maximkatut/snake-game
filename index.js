@@ -1,3 +1,4 @@
+// (function() {
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 let score = document.querySelector(".score");
@@ -16,46 +17,51 @@ ctx.fillRect(0, 0, box.width, box.height);
 // Create a snake object
 let snake = {
   head: {
-    x: 100,
-    y: 100
+    x: this.x,
+    y: this.y
   },
-  body: [
-    {
-      x: 90,
-      y: 100
-    },
-    {
-      x: 80,
-      y: 100
-    },
-    {
-      x: 70,
-      y: 100
-    }
-  ],
-  length: 40,
-  speed: 200,
-  direction: "right",
-  step: 10,
-  score: 0,
-  level: 1
+  body: this.body,
+  length: this.length,
+  speed: this.speed,
+  direction: this.direction,
+  step: this.step,
+  score: this.score,
+  level: this.level
 };
+
+function newGame() {
+  snake.head.x = 100;
+  snake.head.y = 100;
+  snake.length = 40;
+  snake.speed = 200;
+  snake.direction = "right";
+  snake.step = 10;
+  snake.score = 0;
+  snake.level = 1;
+  snake.body = [];
+  for (let i = 0; i < 3; i++) {
+    snake.body.push({ x: 90 - 10 * i, y: 100 });
+  }
+}
+
 // Create a food object
 let food = {
   x: this.x,
   y: this.y
 };
-let game_switch = false;
+
+let game_switch = "off";
 
 function init() {
+  newGame();
+  setFood();
   game();
 }
 
 function game() {
-  snake.setDirection();
+  setDirection();
   refreshCanvas();
-  startGame();
-  youWin();
+  updateStatusOfGame();
   eatenFood();
   window.setTimeout(game, snake.speed);
 }
@@ -128,7 +134,7 @@ function draw() {
   }
 }
 
-snake.setDirection = function() {
+function setDirection() {
   document.addEventListener("keydown", function(e) {
     let key = e.keyCode;
     let keysToDirection = {
@@ -142,66 +148,101 @@ snake.setDirection = function() {
       snake.direction = direction;
     }
   });
-};
+}
 
-food.setFood = function() {
-  this.x = Math.floor((Math.random() * box.width) / 10) * 10;
-  this.y = Math.floor((Math.random() * box.width) / 10) * 10;
-};
+// set new coord to food
+function setFood() {
+  food.x = Math.floor((Math.random() * box.width) / 10) * 10;
+  food.y = Math.floor((Math.random() * box.width) / 10) * 10;
+}
 
-food.setFood();
-
+// increse score and set new apple if it was eaten
 function eatenFood() {
   if (snake.head.x === food.x && snake.head.y === food.y) {
     snake.score++;
-    setNextLevel();
+    // if score more than 10 go to next level and increase the speed
+    if (snake.score === 10) {
+      snake.level++;
+      snake.speed -= 25;
+      snake.score = 0;
+      level.innerText = "Level: " + snake.level;
+      snake.body = snake.body.slice(0, 2);
+    }
     score.innerText = "Score: " + snake.score;
     snake.body.push({
       x: snake.body[snake.body.length - 1].x,
       y: snake.body[snake.body.length - 1].y
     });
-    food.setFood();
+    setFood();
   }
 }
 
-// if score more than 10 go to next level and increase the speed
-function setNextLevel() {
-  if (snake.score === 10) {
-    snake.level++;
-    snake.speed -= 25;
-    snake.score = 0;
-    level.innerText = "Level: " + snake.level;
-    snake.body = snake.body.slice(0, 2);
+function resetGameMessage(message, x) {
+  refreshCanvas();
+  newGame();
+  level.innerText = "Level: 1";
+  score.innerText = "Score: 0";
+  ctx.fillStyle = "black";
+  ctx.font = "48px VT323";
+  ctx.fillText(message, x, 200);
+  ctx.fillText("Press SPACE to begin", 10, 250);
+}
+
+// function snakeCollapse() {
+//   //game over if collapse
+//   for (let i = 0; i < snake.body.length; i++) {
+//     if (snake.head.x === snake.body[i].x && snake.head.y === snake.body[i].y) {
+//       setMessage("GAME OVER", 120);
+//     }
+//   }
+// }
+
+function HandlerSpaceToStart(e) {
+  if (e.keyCode === 32) {
+    game_switch = "on";
+    console.log(e.keyCode);
   }
 }
 
-// after level 10 gamer win
-function youWin() {
-  if (snake.level === 10) {
-    refreshCanvas();
-    game_switch = false;
-    snake.speed = 200;
-    level.innerText = "Level: 1";
-    ctx.fillStyle = "black";
-    ctx.font = "48px VT323";
-    ctx.fillText("You WIN!", 120, 200);
-    ctx.fillText("Press SPACE to begin", 10, 250);
+//handler for settings menu
+function HandlerMtoMenu(e) {
+  if (e.keyCode === 77) {
+    game_switch = "menu";
   }
 }
 
-function startGame() {
-  if (game_switch) {
-    draw();
-  } else {
-    ctx.fillStyle = "black";
-    ctx.font = "48px VT323";
-    ctx.fillText("Press SPACE to begin", 10, 200);
-    window.addEventListener("keydown", e => {
-      if (e.keyCode === 32) {
-        game_switch = true;
-        snake.level = 1;
+// game screen(start, win, gameover, play), depends on game_switch
+function updateStatusOfGame() {
+  switch (game_switch) {
+    case "off":
+      ctx.fillStyle = "black";
+      ctx.font = "48px VT323";
+      ctx.fillText("Press SPACE to begin", 10, 200);
+      window.addEventListener("keydown", HandlerSpaceToStart);
+      window.addEventListener("keydown", HandlerMtoMenu);
+      break;
+
+    case "on":
+      draw();
+      window.removeEventListener("keydown", HandlerSpaceToStart);
+      if (snake.level === 10) {
+        game_switch = "win";
       }
-    });
+      break;
+
+    case "win":
+      resetGameMessage("You WIN!", 120);
+      window.addEventListener("keydown", HandlerSpaceToStart);
+      break;
+
+    case "over":
+      resetGameMessage("GAME OVER", 120);
+      window.addEventListener("keydown", HandlerSpaceToStart);
+      break;
+
+    case "menu":
+      window.addEventListener("keydown", HandlerSpaceToStart);
+      break;
   }
 }
 
@@ -211,3 +252,4 @@ function refreshCanvas() {
 }
 
 init();
+// })();
