@@ -10,6 +10,7 @@ body {
 }
 
 .block {
+  position: relative;
   display: flex;
   justify-content: space-between;
   width: 400px;
@@ -21,6 +22,16 @@ body {
 
 .block p {
   padding: 0 20px;
+}
+
+.menu {
+  display: none;
+  position: absolute;
+  top: 28px;
+  width: 360px;
+  height: 360px;
+  padding: 20px;
+  background-color: #aaa;
 }
 
 #canvas {

@@ -14,8 +14,16 @@
     <h1>The Snake!</h1>
     <div class="block">
       <p class="score">Score: 0</p>
-      <p class="menu">Menu(press M)</p>
+      <p class="menu-text">Menu(press M)</p>
       <p class="level">Level: 1</p>
+      <div class="menu">
+        <p>Press SPACE to continue</p>
+        <br />
+        <p>Settings:</p>
+        <br />
+        <input type="checkbox" name="wall" value="wall" />
+        <label for="wall"> Turn on/off walls</label>
+      </div>
     </div>
     <canvas id="canvas"></canvas>
     <script src="index.js"></script>

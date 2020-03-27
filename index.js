@@ -225,6 +225,7 @@ function updateStatusOfGame() {
       if (snake.level === 10) {
         game_switch = "win";
       }
+      menu.style.display = "none";
       break;
 
     case "win":
@@ -239,6 +240,7 @@ function updateStatusOfGame() {
 
     case "menu":
       window.addEventListener("keydown", HandlerSpaceToStart);
+      menu.style.display = "block";
       break;
   }
 }
