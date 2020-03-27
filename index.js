@@ -3,6 +3,7 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 let score = document.querySelector(".score");
 let level = document.querySelector(".level");
+let menu = document.querySelector(".menu");
 
 const box = {
   width: 400,
@@ -55,15 +56,15 @@ let game_switch = "off";
 function init() {
   newGame();
   setFood();
-  game();
+  gameLoop();
 }
 
-function game() {
+function gameLoop() {
   setDirection();
   refreshCanvas();
   updateStatusOfGame();
   eatenFood();
-  window.setTimeout(game, snake.speed);
+  window.setTimeout(gameLoop, snake.speed);
 }
 
 function drawBody() {
@@ -96,7 +97,7 @@ function drawBody() {
   }
   //delete last coord from array
   snake.body.pop();
-  //add new coord in start of array
+  //add new coord in the beginning of array
   snake.body.unshift({ x: snake.head.x, y: snake.head.y });
 }
 
@@ -107,6 +108,7 @@ function draw() {
       drawBody();
       if (snake.head.y === 0) {
         snake.head.y = box.height;
+        game_switch = "over";
       }
       snake.head.y -= snake.step;
       break;
@@ -114,6 +116,7 @@ function draw() {
       drawBody();
       if (snake.head.y === box.height - snake.step) {
         snake.head.y = -snake.step;
+        game_switch = "over";
       }
       snake.head.y += snake.step;
       break;
@@ -121,6 +124,7 @@ function draw() {
       drawBody();
       if (snake.head.x === 0) {
         snake.head.x = box.width;
+        game_switch = "over";
       }
       snake.head.x -= snake.step;
       break;
@@ -128,26 +132,29 @@ function draw() {
       drawBody();
       if (snake.head.x === box.width - snake.step) {
         snake.head.x = -snake.step;
+        game_switch = "over";
       }
       snake.head.x += snake.step;
       break;
   }
 }
 
+function HandlerArrowsToDirection(e) {
+  let key = e.keyCode;
+  let keysToDirection = {
+    38: "up",
+    40: "down",
+    37: "left",
+    39: "right"
+  };
+  let new_direction = keysToDirection[key];
+  if (new_direction) {
+    snake.direction = new_direction;
+  }
+}
+
 function setDirection() {
-  document.addEventListener("keydown", function(e) {
-    let key = e.keyCode;
-    let keysToDirection = {
-      38: "up",
-      40: "down",
-      37: "left",
-      39: "right"
-    };
-    let direction = keysToDirection[key];
-    if (direction) {
-      snake.direction = direction;
-    }
-  });
+  window.addEventListener("keydown", HandlerArrowsToDirection);
 }
 
 // set new coord to food
@@ -184,23 +191,13 @@ function resetGameMessage(message, x) {
   score.innerText = "Score: 0";
   ctx.fillStyle = "black";
   ctx.font = "48px VT323";
-  ctx.fillText(message, x, 200);
+  ctx.fillText(message, x, 180);
   ctx.fillText("Press SPACE to begin", 10, 250);
 }
-
-// function snakeCollapse() {
-//   //game over if collapse
-//   for (let i = 0; i < snake.body.length; i++) {
-//     if (snake.head.x === snake.body[i].x && snake.head.y === snake.body[i].y) {
-//       setMessage("GAME OVER", 120);
-//     }
-//   }
-// }
 
 function HandlerSpaceToStart(e) {
   if (e.keyCode === 32) {
     game_switch = "on";
-    console.log(e.keyCode);
   }
 }
 
