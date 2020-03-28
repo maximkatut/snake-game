@@ -40,17 +40,20 @@ body {
 
 #wall,
 #bgcolor,
-#color {
+#color,
+#music {
   opacity: 0;
 }
 
 .wall,
 .bgcolor,
-.color {
+.color,
+.music {
   position: relative;
 }
 
 .wall::before,
+.music::before,
 .color::before,
 .bgcolor::before {
   content: "";
@@ -63,6 +66,7 @@ body {
 }
 
 #wall:checked ~ .wall::before,
+#music:checked ~ .music::before,
 #color:checked ~ .color::before,
 #bgcolor:checked ~ .bgcolor::before {
   width: 8px;
@@ -76,6 +80,8 @@ body {
 
 #wall:focus ~ .wall,
 #wall:hover ~ .wall,
+#music:focus ~ .music,
+#music:hover ~ .music,
 #color:focus ~ .color,
 #color:hover ~ .color,
 #bgcolor:focus ~ .bgcolor,

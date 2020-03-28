@@ -5,15 +5,16 @@ let score = document.querySelector(".score");
 let level = document.querySelector(".level");
 let menu = document.querySelector(".menu");
 menu.style.display = "none";
-
+const myMusic = document.getElementById("audio");
 const box = {
   width: 400,
   height: 400
 };
+let bgColor = "green";
 
 canvas.width = box.width;
 canvas.height = box.height;
-ctx.fillStyle = "green";
+ctx.fillStyle = bgColor;
 ctx.fillRect(0, 0, box.width, box.height);
 
 // Create a snake object
@@ -61,6 +62,7 @@ function init() {
 }
 
 function gameLoop() {
+  updateSettings();
   setDirection();
   refreshCanvas();
   updateStatusOfGame();
@@ -253,8 +255,18 @@ function updateStatusOfGame() {
 }
 
 function refreshCanvas() {
-  ctx.fillStyle = "green";
+  ctx.fillStyle = bgColor;
   ctx.fillRect(0, 0, box.width, box.height);
+}
+
+//settings
+
+function updateSettings() {
+  let bg_input = document.querySelector(".bg-input").value;
+  let bg_color_checkbox = document.getElementById("bgcolor");
+  if (bg_color_checkbox.checked) {
+    bgColor = bg_input;
+  } else bgColor = "green";
 }
 
 init();

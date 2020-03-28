@@ -11,6 +11,10 @@
     />
   </head>
   <body>
+    <audio id="audio" loop autoplay>
+      <source src="assets/mymusic.wav" />
+      Your browser does not support the audio element.
+    </audio>
     <h1>The Snake!</h1>
     <div class="block">
       <p class="score">Score: 0</p>
@@ -34,7 +38,9 @@
               id="bgcolor"
             />
             <label class="bgcolor" for="bgcolor"> Background color</label>
-            <div class="change-bgcolor"><input class="bg-input" type="color" value="#e66465"/></div>
+            <div class="change-bgcolor">
+              <input class="bg-input" type="color" value="#e66465" />
+            </div>
           </li>
           <li>
             <input type="checkbox" name="color" value="color" id="color" />
@@ -44,6 +50,10 @@
               <div class="gray" tabindex="0"></div>
               <div class="colorfull" tabindex="0"></div>
             </div>
+          </li>
+          <li>
+            <input type="checkbox" name="music" value="music" id="music" />
+            <label class="music" for="music"> Mute audio</label>
           </li>
         </ul>
       </div>
