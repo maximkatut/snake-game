@@ -17,12 +17,35 @@
       <p class="menu-text">Menu(press M)</p>
       <p class="level">Level: 1</p>
       <div class="menu">
-        <p>Press SPACE to continue</p>
+        <p>Press M to start</p>
         <br />
         <p>Settings:</p>
         <br />
-        <input type="checkbox" name="wall" value="wall" id="wall" />
-        <label class="wall" for="wall"> Turn off walls</label>
+        <ul>
+          <li>
+            <input type="checkbox" name="wall" value="wall" id="wall" />
+            <label class="wall" for="wall"> Turn off walls</label>
+          </li>
+          <li>
+            <input
+              type="checkbox"
+              name="bgcolor"
+              value="bgcolor"
+              id="bgcolor"
+            />
+            <label class="bgcolor" for="bgcolor"> Background color</label>
+            <div class="change-bgcolor"><input class="bg-input" type="color" value="#e66465"/></div>
+          </li>
+          <li>
+            <input type="checkbox" name="color" value="color" id="color" />
+            <label class="color" for="color"> Change snake color</label>
+            <div class="change-color">
+              <div class="black checked" tabindex="0"></div>
+              <div class="gray" tabindex="0"></div>
+              <div class="colorfull" tabindex="0"></div>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
     <canvas id="canvas"></canvas>

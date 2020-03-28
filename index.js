@@ -4,6 +4,7 @@ const ctx = canvas.getContext("2d");
 let score = document.querySelector(".score");
 let level = document.querySelector(".level");
 let menu = document.querySelector(".menu");
+menu.style.display = "none";
 
 const box = {
   width: 400,
@@ -203,8 +204,14 @@ function HandlerSpaceToStart(e) {
 
 //handler for settings menu
 function HandlerMtoMenu(e) {
-  if (e.keyCode === 77) {
-    game_switch = "menu";
+  if (menu.style.display === "none") {
+    if (e.keyCode === 77) {
+      game_switch = "menu";
+    }
+  } else {
+    if (e.keyCode === 77) {
+      game_switch = "on";
+    }
   }
 }
 
@@ -239,7 +246,7 @@ function updateStatusOfGame() {
       break;
 
     case "menu":
-      window.addEventListener("keydown", HandlerSpaceToStart);
+      window.removeEventListener("keydown", HandlerSpaceToStart);
       menu.style.display = "block";
       break;
   }

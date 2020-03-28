@@ -4,6 +4,10 @@ p {
   margin: 0;
   padding: 0;
 }
+ul {
+  list-style-type: none;
+  margin-left: 30px;
+}
 
 body {
   font-family: "VT323", "Monospace";
@@ -34,16 +38,21 @@ body {
   background-color: #aaa;
 }
 
-#wall {
-  position: relative;
+#wall,
+#bgcolor,
+#color {
   opacity: 0;
 }
 
-.wall {
+.wall,
+.bgcolor,
+.color {
   position: relative;
 }
 
-.wall::before {
+.wall::before,
+.color::before,
+.bgcolor::before {
   content: "";
   position: absolute;
   top: 2px;
@@ -53,7 +62,9 @@ body {
   border: 2px solid #000;
 }
 
-#wall:checked ~ .wall::before {
+#wall:checked ~ .wall::before,
+#color:checked ~ .color::before,
+#bgcolor:checked ~ .bgcolor::before {
   width: 8px;
   height: 8px;
   top: 5.5px;
@@ -63,8 +74,119 @@ body {
   outline-offset: 2px;
 }
 
+#wall:focus ~ .wall,
+#wall:hover ~ .wall,
+#color:focus ~ .color,
+#color:hover ~ .color,
+#bgcolor:focus ~ .bgcolor,
+#bgcolor:hover ~ .bgcolor {
+  color: green;
+}
+
+#bgcolor:checked ~ .change-bgcolor {
+  display: block;
+}
+
+#color:checked ~ .change-color {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 5px;
+  padding: 5px;
+  width: 200px;
+  height: 40px;
+}
+
+.change-color {
+  display: none;
+}
+
+.change-bgcolor {
+  display: none;
+}
+
+.bg-input {
+  margin: 2px 25px;
+  width: 120px;
+  height: 30px;
+}
+
+.checked {
+  outline-offset: 1px;
+  outline: 2px solid #000;
+}
+
+.black {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  background-color: #000;
+}
+
+.gray {
+  cursor: pointer;
+  width: 38px;
+  height: 38px;
+  border: 1px solid #000;
+  background-color: #aaa;
+}
+
+.colorfull {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(
+    160deg,
+    #46b397,
+    #78d626,
+    #c59e60,
+    #e34525,
+    #253de3,
+    #2591e3,
+    #e2e325
+  );
+  background-size: 540% 540%;
+
+  -webkit-animation: anim 1s ease infinite;
+  -moz-animation: anim 1s ease infinite;
+  animation: anim 1s ease infinite;
+}
+
 #canvas {
   display: flex;
   margin: 0 auto;
   border: 2px solid black;
+}
+
+@-webkit-keyframes anim {
+  0% {
+    background-position: 0% 56%;
+  }
+  50% {
+    background-position: 100% 45%;
+  }
+  100% {
+    background-position: 0% 56%;
+  }
+}
+@-moz-keyframes anim {
+  0% {
+    background-position: 0% 56%;
+  }
+  50% {
+    background-position: 100% 45%;
+  }
+  100% {
+    background-position: 0% 56%;
+  }
+}
+@keyframes anim {
+  0% {
+    background-position: 0% 56%;
+  }
+  50% {
+    background-position: 100% 45%;
+  }
+  100% {
+    background-position: 0% 56%;
+  }
 }
