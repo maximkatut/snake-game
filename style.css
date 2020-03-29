@@ -94,12 +94,7 @@ body {
 }
 
 #color:checked ~ .change-color {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 5px;
-  padding: 5px;
-  width: 200px;
-  height: 40px;
+  display: block;
 }
 
 .change-color {
@@ -110,7 +105,8 @@ body {
   display: none;
 }
 
-.bg-input {
+.bg-input,
+.color-input {
   margin: 2px 25px;
   width: 120px;
   height: 30px;

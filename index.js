@@ -1,16 +1,18 @@
 // (function() {
-const canvas = document.getElementById("canvas");
+const canvas = document.querySelector("#canvas");
 const ctx = canvas.getContext("2d");
 let score = document.querySelector(".score");
 let level = document.querySelector(".level");
 let menu = document.querySelector(".menu");
 menu.style.display = "none";
-const myMusic = document.getElementById("audio");
+const myMusic = document.querySelector("#audio");
 const box = {
   width: 400,
   height: 400
 };
 let bgColor = "green";
+let snakeColor = "black";
+let turnOffWalls = false;
 
 canvas.width = box.width;
 canvas.height = box.height;
@@ -105,13 +107,15 @@ function drawBody() {
 }
 
 function draw() {
-  ctx.fillStyle = "black";
+  ctx.fillStyle = snakeColor;
   switch (snake.direction) {
     case "up":
       drawBody();
       if (snake.head.y === 0) {
         snake.head.y = box.height;
-        game_switch = "over";
+        if (!turnOffWalls) {
+          game_switch = "over";
+        }
       }
       snake.head.y -= snake.step;
       break;
@@ -119,7 +123,9 @@ function draw() {
       drawBody();
       if (snake.head.y === box.height - snake.step) {
         snake.head.y = -snake.step;
-        game_switch = "over";
+        if (!turnOffWalls) {
+          game_switch = "over";
+        }
       }
       snake.head.y += snake.step;
       break;
@@ -127,7 +133,9 @@ function draw() {
       drawBody();
       if (snake.head.x === 0) {
         snake.head.x = box.width;
-        game_switch = "over";
+        if (!turnOffWalls) {
+          game_switch = "over";
+        }
       }
       snake.head.x -= snake.step;
       break;
@@ -135,7 +143,9 @@ function draw() {
       drawBody();
       if (snake.head.x === box.width - snake.step) {
         snake.head.x = -snake.step;
-        game_switch = "over";
+        if (!turnOffWalls) {
+          game_switch = "over";
+        }
       }
       snake.head.x += snake.step;
       break;
@@ -262,11 +272,31 @@ function refreshCanvas() {
 //settings
 
 function updateSettings() {
-  let bg_input = document.querySelector(".bg-input").value;
-  let bg_color_checkbox = document.getElementById("bgcolor");
+  //background color
+  const bg_input = document.querySelector(".bg-input").value;
+  const bg_color_checkbox = document.querySelector("#bgcolor");
   if (bg_color_checkbox.checked) {
     bgColor = bg_input;
   } else bgColor = "green";
+
+  //walls
+  const wall_checkbox = document.querySelector("#wall");
+  if (wall_checkbox.checked) {
+    turnOffWalls = true;
+  } else turnOffWalls = false;
+
+  //snake color
+  const color_input = document.querySelector(".color-input").value;
+  const color_checkbox = document.querySelector("#color");
+  if (color_checkbox.checked) {
+    snakeColor = color_input;
+  } else snakeColor = "black";
+
+  //mute audio
+  const music_checkbox = document.querySelector("#music");
+  if (music_checkbox.checked) {
+    myMusic.pause();
+  } else myMusic.play();
 }
 
 init();
